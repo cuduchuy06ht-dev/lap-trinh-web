@@ -4,31 +4,21 @@ from app.database import get_db_connection
 lectures_bp = Blueprint('lectures', __name__, url_prefix='/api/lectures')
 
 @lectures_bp.route('', methods=['GET'])
+@lectures_bp.route('/api/lectures', methods=['GET'])
 def get_lectures():
     conn = get_db_connection()
-    conn.row_factory = sqlite3.Row if 'sqlite3' in globals() else None
     cursor = conn.cursor()
+    cursor.execute("SELECT * FROM lectures")
     
-    search = request.args.get('search', '')
-    subject_id = request.args.get('subject_id', type=int)
-    sort_by = request.args.get('sort', 'created_at')
+    column_names = [description[0] for description in cursor.description]
+    rows = cursor.fetchall()
     
-    query = "SELECT * FROM lectures WHERE title LIKE ?"
-    params = [f"%{search}%"]
-    
-    if subject_id:
-        query += " AND subject_id = ?"
-        params.append(subject_id)
+    result = []
+    for row in rows:
+        result.append(dict(zip(column_names, row)))
         
-    allowed_sorts = ['created_at', 'views', 'title', 'duration']
-    if sort_by in allowed_sorts:
-        query += f" ORDER BY {sort_by} DESC"
-        
-    cursor.execute(query, params)
-    lectures = cursor.fetchall()
     conn.close()
-    
-    return jsonify([dict(row) for row in lectures]), 200
+    return jsonify(result), 200
 
 @lectures_bp.route('/<int:id>', methods=['GET'])
 def get_lecture_detail(id):
@@ -42,3 +32,27 @@ def get_lecture_detail(id):
         return jsonify({'error': 'Không tìm thấy bài giảng'}), 404
         
     return jsonify(dict(lecture)), 200
+@lectures_bp.route('/api/lectures/top-viewed', methods=['GET'])
+
+@lectures_bp.route('/top-viewed', methods=['GET'])
+def get_top_viewed_lectures():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT * FROM lectures ORDER BY views DESC LIMIT 5")
+    lectures = cursor.fetchall()
+    
+    conn.close()
+    return jsonify([dict(lecture) for lecture in lectures]), 200
+
+
+@lectures_bp.route('/latest', methods=['GET'])
+def get_latest_lectures():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT * FROM lectures ORDER BY id DESC LIMIT 5")
+    lectures = cursor.fetchall()
+    
+    conn.close()
+    return jsonify([dict(lecture) for lecture in lectures]), 200
