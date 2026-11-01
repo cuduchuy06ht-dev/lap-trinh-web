@@ -1,11 +1,13 @@
 import React from "react";
+import { assetUrl } from "../services/api";
 
 function VideoCard({
     video,
     variant = "featured",
     onBookmark
 }) {
-    const handleBookmark = () => {
+    const handleBookmark = (event) => {
+        event.stopPropagation();
         onBookmark?.(video.id, !video.isBookmarked);
     };
 
@@ -14,8 +16,9 @@ function VideoCard({
 
             <div className="video-thumbnail">
                 <img
-                    src={video.thumbnail}
+                    src={assetUrl(video.thumbnail || video.thumbnailUrl)}
                     alt={video.title}
+                    onError={(event) => { event.currentTarget.src = "/images/logo.png"; }}
                 />
 
                 <span className="video-duration">
@@ -30,7 +33,7 @@ function VideoCard({
 
                 <div className="video-lecturer">
                     <img
-                        src={video.avatar || "/images/default-avatar.png"}
+                        src={assetUrl(video.avatar) || "/images/logo.png"}
                         alt={video.lecturer}
                     />
 

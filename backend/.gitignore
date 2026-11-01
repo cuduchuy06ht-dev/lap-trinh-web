@@ -1,0 +1,10 @@
+instance/database.db
+__pycache__/
+app/__pycache__/
+app/routes/__pycache__/
+uploads/thumbnails/*
+uploads/videos/*
+!uploads/thumbnails/.gitkeep
+!uploads/videos/.gitkeep
+server.log
+server-error.log

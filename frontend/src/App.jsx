@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // Components dùng chung
 import Header from "./components/Header";
@@ -13,17 +13,43 @@ import HistoryPage from "./pages/History/HistoryPage";
 // Pages của BẠN (Thành viên 2)
 import VideoDetailPage from "./pages/VideoDetail/VideoDetailPage";
 import DashboardPage from "./pages/AdminDashboard/DashboardPage";
+import { login, logout, restoreSession } from "./services/authService";
 
 function App() {
     // Quản lý trang hiện tại ("home", "category", "saved", "history", "video-detail", "admin")
     const [activePage, setActivePage] = useState("home");
     const [selectedVideo, setSelectedVideo] = useState(null);
 
-    // Thông tin người dùng mẫu
-    const user = {
-        name: "Nguyễn Văn A",
-        role: "Quản trị viên", // hoặc "Sinh viên"
-        avatar: null
+    const [user, setUser] = useState(null);
+    const [loadingUser, setLoadingUser] = useState(true);
+    const [showLogin, setShowLogin] = useState(false);
+    const [credentials, setCredentials] = useState({ identity: "", password: "" });
+    const [loginError, setLoginError] = useState("");
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+    useEffect(() => {
+        restoreSession().then(setUser).finally(() => setLoadingUser(false));
+    }, []);
+
+    const handleLogin = async (event) => {
+        event.preventDefault();
+        setLoginError("");
+        setIsLoggingIn(true);
+        try {
+            setUser(await login(credentials.identity, credentials.password));
+            setShowLogin(false);
+            setCredentials({ identity: "", password: "" });
+        } catch (error) {
+            setLoginError(error.response?.data?.message || "Không thể đăng nhập. Vui lòng thử lại.");
+        } finally {
+            setIsLoggingIn(false);
+        }
+    };
+
+    const handleLogout = () => {
+        logout();
+        setUser(null);
+        setActivePage("home");
     };
 
     // Chuyển trang từ Sidebar
@@ -62,6 +88,7 @@ function App() {
                     <VideoDetailPage
                         lecture={selectedVideo}
                         onBack={() => setActivePage("home")}
+                        onVideoClick={handleVideoClick}
                     />
                 );
 
@@ -78,7 +105,10 @@ function App() {
             {/* Header */}
             <Header
                 user={user}
+                loading={loadingUser}
                 onSearch={handleSearch}
+                onLogin={() => setShowLogin(true)}
+                onLogout={handleLogout}
             />
 
             {/* Sidebar */}
@@ -110,8 +140,24 @@ function App() {
 
             {/* Vùng nội dung chính */}
             <main className="app-content">
-                {renderPage()}
+                {loadingUser ? <p className="empty-state">Đang khởi tạo phiên làm việc...</p> : renderPage()}
             </main>
+            {showLogin && (
+                <div className="login-overlay" role="dialog" aria-modal="true" aria-labelledby="login-title">
+                    <form className="login-modal" onSubmit={handleLogin}>
+                        <button type="button" className="login-close" onClick={() => setShowLogin(false)} aria-label="Đóng">×</button>
+                        <h2 id="login-title">Đăng nhập</h2>
+                        <p>Đăng nhập để lưu bài giảng và theo dõi tiến độ học tập.</p>
+                        <label htmlFor="login-identity">Tên đăng nhập hoặc email</label>
+                        <input id="login-identity" autoFocus required value={credentials.identity} onChange={(e) => setCredentials({ ...credentials, identity: e.target.value })} />
+                        <label htmlFor="login-password">Mật khẩu</label>
+                        <input id="login-password" type="password" required value={credentials.password} onChange={(e) => setCredentials({ ...credentials, password: e.target.value })} />
+                        {loginError && <p className="login-error">{loginError}</p>}
+                        <button className="login-submit" disabled={isLoggingIn}>{isLoggingIn ? "Đang đăng nhập..." : "Đăng nhập"}</button>
+                        <small>Tài khoản mẫu: admin / 123456</small>
+                    </form>
+                </div>
+            )}
         </div>
     );
 }

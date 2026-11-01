@@ -161,6 +161,51 @@
     justify-content: flex-end;
 }
 
+.header-auth-button {
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: var(--radius-sm);
+    padding: 7px 10px;
+    color: var(--text-primary);
+    background: transparent;
+    cursor: pointer;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.header-auth-button:hover { background: rgba(255, 255, 255, 0.12); }
+
+.login-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: rgba(1, 18, 34, 0.78);
+}
+
+.login-modal {
+    position: relative;
+    width: min(100%, 380px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 28px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--card-bg);
+    box-shadow: var(--shadow-md);
+}
+
+.login-modal h2, .login-modal p { margin: 0; color: var(--text-primary); }
+.login-modal p, .login-modal small { color: var(--text-muted); }
+.login-modal label { color: var(--text-secondary); font-size: 13px; }
+.login-modal input { padding: 10px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--surface-bg); color: var(--text-primary); }
+.login-submit { margin-top: 6px; padding: 10px; border: 0; border-radius: var(--radius-sm); background: var(--primary-color); color: white; font-weight: 700; cursor: pointer; }
+.login-submit:disabled { opacity: .65; cursor: wait; }
+.login-close { position: absolute; top: 8px; right: 10px; border: 0; background: transparent; color: var(--text-muted); font-size: 25px; cursor: pointer; }
+.login-error { color: var(--danger-color) !important; font-size: 13px; }
+
 .user-avatar {
     width: 40px;
     height: 40px;

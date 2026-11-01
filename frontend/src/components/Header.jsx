@@ -1,7 +1,7 @@
 
 import React from "react";
 
-function Header({ user = null, loading = false, onSearch }) {
+function Header({ user = null, loading = false, onSearch, onLogin, onLogout }) {
     return (
         <header className="main-header">
 
@@ -70,13 +70,10 @@ function Header({ user = null, loading = false, onSearch }) {
                                 {user.role}
                             </span>
                         </div>
+                        <button className="header-auth-button" onClick={onLogout}>Đăng xuất</button>
                     </>
                 ) : (
-                    <div className="user-info">
-                        <span className="user-name">
-                            Chưa đăng nhập
-                        </span>
-                    </div>
+                    <button className="header-auth-button" onClick={onLogin}>Đăng nhập</button>
                 )}
 
             </div>
