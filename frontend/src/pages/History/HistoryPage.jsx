@@ -304,20 +304,6 @@ function HistoryPage({ onVideoClick }) {
                         }}
                     />
                 </div>
-
-                <div className="history-sort">
-                    <label>Sắp xếp theo</label>
-
-                    <select
-                        value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value)}
-                    >
-                        <option value="newest">Xem gần đây nhất</option>
-                        <option value="oldest">Xem lâu nhất</option>
-                        <option value="progress">Tiến độ cao nhất</option>
-                    </select>
-                </div>
-
             </div>
 
             {/* Danh sách lịch sử */}

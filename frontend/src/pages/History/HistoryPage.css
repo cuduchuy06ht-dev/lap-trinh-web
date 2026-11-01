@@ -454,16 +454,6 @@
         flex-direction: column;
     }
 
-    .history-sort {
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    .history-sort select {
-        flex: 1;
-        min-width: 0;
-    }
-
     .history-card-footer {
         align-items: flex-start;
         flex-direction: column;

@@ -162,46 +162,6 @@ function HomePage({
                     ))}
                 </div>
             </section>
-
-
-            {/* ================= CATEGORIES ================= */}
-            <section className="home-section">
-
-                <div className="home-section-header">
-                    <h2>
-                        <span className="section-icon category-icon">✣</span>
-                        Danh mục môn học
-                    </h2>
-
-                    <button
-                        className="view-all-button"
-                        onClick={() => onCategoryClick?.("all")}
-                    >
-                        Xem tất cả →
-                    </button>
-                </div>
-
-                <div className="category-grid">
-                    {categories.map(category => (
-                        <button
-                            className="category-card"
-                            key={category.id}
-                            onClick={() => onCategoryClick?.(category.id)}
-                        >
-                            <div className={`category-icon-box ${category.color}`}>
-                                <span>{category.icon}</span>
-                            </div>
-
-                            <h3>{category.name}</h3>
-
-                            <p>{category.count} bài giảng</p>
-                        </button>
-                    ))}
-                </div>
-
-            </section>
-
-
             {/* ================= FEATURED VIDEOS ================= */}
             <section className="home-section" id="featured-section">
 
@@ -210,13 +170,6 @@ function HomePage({
                         <span className="section-icon featured-icon">★</span>
                         Bài giảng nổi bật
                     </h2>
-
-                    <button
-                        className="view-all-button"
-                        onClick={() => onVideoClick?.("featured")}
-                    >
-                        Xem tất cả →
-                    </button>
                 </div>
 
                 <div className="featured-video-grid">
@@ -246,30 +199,6 @@ function HomePage({
                         Bài giảng mới nhất
                     </h2>
 
-                    <div className="latest-actions">
-                        <button
-                            className="view-all-button"
-                            onClick={() => onVideoClick?.("latest")}
-                        >
-                            Xem tất cả →
-                        </button>
-
-                        <button
-                            className="carousel-button"
-                            onClick={() => scrollLatest(-1)}
-                            aria-label="Cuộn sang trái"
-                        >
-                            ‹
-                        </button>
-
-                        <button
-                            className="carousel-button"
-                            onClick={() => scrollLatest(1)}
-                            aria-label="Cuộn sang phải"
-                        >
-                            ›
-                        </button>
-                    </div>
                 </div>
 
                 <div className="latest-video-grid" ref={latestRef}>

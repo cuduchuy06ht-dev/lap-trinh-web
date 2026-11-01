@@ -226,19 +226,6 @@ function BookmarkPage({ onVideoClick }) {
                         }}
                     />
                 </div>
-
-                <div className="bookmark-control">
-                    <label>Sắp xếp theo</label>
-                    <select
-                        value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value)}
-                    >
-                        <option value="newest">Ngày lưu (mới nhất)</option>
-                        <option value="oldest">Ngày lưu (cũ nhất)</option>
-                        <option value="name">Tên bài giảng</option>
-                    </select>
-                </div>
-
                 <div className="bookmark-control">
                     <label>Hiển thị</label>
                     <select
