@@ -1,6 +1,8 @@
 import React from "react";
 import { assetUrl } from "../services/api";
 
+const VIDEO_COVER = assetUrl("/uploads/thumbnails/baigiang.png");
+
 function VideoCard({
     video,
     variant = "featured",
@@ -16,7 +18,7 @@ function VideoCard({
 
             <div className="video-thumbnail">
                 <img
-                    src={assetUrl(video.thumbnail || video.thumbnailUrl)}
+                    src={VIDEO_COVER}
                     alt={video.title}
                     onError={(event) => { event.currentTarget.src = "/images/logo.png"; }}
                 />
